@@ -85,6 +85,7 @@ public class CESpawner : MonoBehaviour
         } while (usedElements.Contains(randomIndex));
         usedElements.Add(randomIndex);
         var randomChemicalElement = dictionary[randomIndex];
+        Debug.Log(hitPosePosition);
         ChemicalElements[ceCount] = Instantiate(ChemicalElement_Prefab, hitPosePosition, hitPoseRotation);
         ChemicalElements[ceCount].GetComponent<ChemicalElement>().ElementName = randomChemicalElement.Key;
         ChemicalElements[ceCount].GetComponent<ChemicalElement>().ElementGroup = randomChemicalElement.Value;
@@ -109,31 +110,53 @@ public class CESpawner : MonoBehaviour
         }
     }
 
+    private Vector3 debugHitPos;
+    private bool debugHasHit;
+
     bool getPositionAndRotation(Vector2 screenPosition)
     {
+        Vector2 screenPoint = new Vector2(Random.value * Screen.width, Random.value * Screen.height);
+        Ray ray = Camera.main.ScreenPointToRay(screenPoint);
+
         var rayHits = new List<ARRaycastHit>();
-        raycastManager.Raycast(screenPosition, rayHits);
+        raycastManager.Raycast(screenPoint, rayHits, TrackableType.Planes);
         if (rayHits.Count > 0)
         {
-            hitPosePosition = rayHits[0].pose.position;
-            hitPoseRotation = rayHits[0].pose.rotation;
+            int randomElement = Random.Range(0, rayHits.Count());
+            hitPosePosition = rayHits[randomElement].pose.position;
+            hitPoseRotation = rayHits[randomElement].pose.rotation;
+
+            // Save for debugging
+            debugHasHit = true;
+            debugHitPos = hitPosePosition;
+
             return true;
         }
         else
         {
+            debugHasHit = false;
             return false;
         }
     }
 
+    void OnDrawGizmos()
+    {
+       // if (!debugHasHit) return;
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(debugHitPos, 0.2f);
+    }
+
     private Vector2 getRandomPoint()
     {
-        float height = 2f * playerCamera.orthographicSize;
-        float width = height * playerCamera.aspect;
+        //float height = 2f * playerCamera.orthographicSize;
+        //float width = height * playerCamera.aspect;
 
-        Vector2 pos = new Vector2(
-            Random.Range(-width / 2f, width / 2f),
-            Random.Range(-height / 2f, height / 2f));
-        return pos;
+        //Vector2 pos = new Vector2(
+        //    Random.Range(-width / 2f, width / 2f),
+        //    Random.Range(-height / 2f, height / 2f));
+        return new Vector2(Random.value, Random.value);
+        //return pos;
     }
 
     IEnumerator SetIsPlacingToFalseWithDelay()
