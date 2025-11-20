@@ -71,7 +71,7 @@ public class CESpawner : MonoBehaviour
         dict.Add("Sb", "Metalloids");
         dict.Add("Te", "Metalloids");
 
-
+        
     }
 
     public void spawnChemicalElements()
@@ -85,7 +85,6 @@ public class CESpawner : MonoBehaviour
         } while (usedElements.Contains(randomIndex));
         usedElements.Add(randomIndex);
         var randomChemicalElement = dictionary[randomIndex];
-        Debug.Log(hitPosePosition);
         ChemicalElements[ceCount] = Instantiate(ChemicalElement_Prefab, hitPosePosition, hitPoseRotation);
         ChemicalElements[ceCount].GetComponent<ChemicalElement>().ElementName = randomChemicalElement.Key;
         ChemicalElements[ceCount].GetComponent<ChemicalElement>().ElementGroup = randomChemicalElement.Value;

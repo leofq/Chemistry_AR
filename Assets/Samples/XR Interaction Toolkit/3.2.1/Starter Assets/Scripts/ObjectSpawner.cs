@@ -2,16 +2,29 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.XR.Interaction.Toolkit.Utilities;
 
+using UnityEngine;
+using UnityEditor;
+using UnityEditor.VersionControl;
+
 namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
 {
-    /// <summary>
-    /// Behavior with an API for spawning objects from a given set of prefabs.
-    /// </summary>
     public class ObjectSpawner : MonoBehaviour
     {
         [SerializeField]
         [Tooltip("The camera that objects will face when spawned. If not set, defaults to the main camera.")]
         Camera m_CameraToFace;
+
+        private const int MAX_OBJECTS = 3;
+        private int spawnedObjectCount = 0;
+
+        public static class EventManager
+        {
+            public static event Action OnSpawnBasket;
+            public static void SetBasketName()
+            {
+                OnSpawnBasket?.Invoke();
+            }
+        }
 
         /// <summary>
         /// The camera that objects will face when spawned. If not set, defaults to the <see cref="Camera.main"/> camera.
@@ -29,6 +42,8 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
         [SerializeField]
         [Tooltip("The list of prefabs available to spawn.")]
         List<GameObject> m_ObjectPrefabs = new List<GameObject>();
+
+        [SerializeField] GameObject Basket_prefab;
 
         /// <summary>
         /// The list of prefabs available to spawn.
@@ -192,46 +207,52 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
         /// <seealso cref="objectSpawned"/>
         public bool TrySpawnObject(Vector3 spawnPoint, Vector3 spawnNormal)
         {
-            if (m_OnlySpawnInView)
+            if (spawnedObjectCount < MAX_OBJECTS)
             {
-                var inViewMin = m_ViewportPeriphery;
-                var inViewMax = 1f - m_ViewportPeriphery;
-                var pointInViewportSpace = cameraToFace.WorldToViewportPoint(spawnPoint);
-                if (pointInViewportSpace.z < 0f || pointInViewportSpace.x > inViewMax || pointInViewportSpace.x < inViewMin ||
-                    pointInViewportSpace.y > inViewMax || pointInViewportSpace.y < inViewMin)
+                if (m_OnlySpawnInView)
                 {
-                    return false;
+                    var inViewMin = m_ViewportPeriphery;
+                    var inViewMax = 1f - m_ViewportPeriphery;
+                    var pointInViewportSpace = cameraToFace.WorldToViewportPoint(spawnPoint);
+                    if (pointInViewportSpace.z < 0f || pointInViewportSpace.x > inViewMax || pointInViewportSpace.x < inViewMin ||
+                        pointInViewportSpace.y > inViewMax || pointInViewportSpace.y < inViewMin)
+                    {
+                        return false;
+                    }
                 }
+
+                // var objectIndex = isSpawnOptionRandomized ? UnityEngine.Random.Range(0, m_ObjectPrefabs.Count) : m_SpawnOptionIndex;
+                GameObject newObject = Instantiate(Basket_prefab);
+               //newObject.GetComponent<Basket>().GroupName = "test";
+                if (m_SpawnAsChildren)
+                    newObject.transform.parent = transform;
+
+                newObject.transform.position = spawnPoint;
+                EnsureFacingCamera();
+
+                var facePosition = m_CameraToFace.transform.position;
+                var forward = facePosition - spawnPoint;
+                BurstMathUtility.ProjectOnPlane(forward, spawnNormal, out var projectedForward);
+                newObject.transform.rotation = Quaternion.LookRotation(projectedForward, spawnNormal);
+
+                if (m_ApplyRandomAngleAtSpawn)
+                {
+                    var randomRotation = UnityEngine.Random.Range(-m_SpawnAngleRange, m_SpawnAngleRange);
+                    newObject.transform.Rotate(Vector3.up, randomRotation);
+                }
+
+                if (m_SpawnVisualizationPrefab != null)
+                {
+                    var visualizationTrans = Instantiate(m_SpawnVisualizationPrefab).transform;
+                    visualizationTrans.position = spawnPoint;
+                    visualizationTrans.rotation = newObject.transform.rotation;
+                }
+
+                spawnedObjectCount++;
+                objectSpawned?.Invoke(newObject);
+                return true;
             }
-
-            var objectIndex = isSpawnOptionRandomized ? Random.Range(0, m_ObjectPrefabs.Count) : m_SpawnOptionIndex;
-            var newObject = Instantiate(m_ObjectPrefabs[objectIndex]);
-            if (m_SpawnAsChildren)
-                newObject.transform.parent = transform;
-
-            newObject.transform.position = spawnPoint;
-            EnsureFacingCamera();
-
-            var facePosition = m_CameraToFace.transform.position;
-            var forward = facePosition - spawnPoint;
-            BurstMathUtility.ProjectOnPlane(forward, spawnNormal, out var projectedForward);
-            newObject.transform.rotation = Quaternion.LookRotation(projectedForward, spawnNormal);
-
-            if (m_ApplyRandomAngleAtSpawn)
-            {
-                var randomRotation = Random.Range(-m_SpawnAngleRange, m_SpawnAngleRange);
-                newObject.transform.Rotate(Vector3.up, randomRotation);
-            }
-
-            if (m_SpawnVisualizationPrefab != null)
-            {
-                var visualizationTrans = Instantiate(m_SpawnVisualizationPrefab).transform;
-                visualizationTrans.position = spawnPoint;
-                visualizationTrans.rotation = newObject.transform.rotation;
-            }
-
-            objectSpawned?.Invoke(newObject);
-            return true;
+            else { return false; }
         }
     }
 }

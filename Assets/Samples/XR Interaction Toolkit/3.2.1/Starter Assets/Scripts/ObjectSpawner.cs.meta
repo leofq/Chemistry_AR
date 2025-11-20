@@ -3,7 +3,11 @@ guid: 956dd6cf70eaca449a45b6a95b96c8c1
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - m_CameraToFace: {instanceID: 0}
+  - Basket_prefab: {fileID: 3925871419549447876, guid: 751183ec8be879c4498b5c606afd463c, type: 3}
+  - chemicalElement: {instanceID: 0}
+  - m_SpawnVisualizationPrefab: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
