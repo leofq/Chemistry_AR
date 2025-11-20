@@ -16,9 +16,13 @@ public class Basket : MonoBehaviour
         Debug.Log("in start func");
         m_TextComponent = GetComponentInChildren<TMP_Text>();
         m_TextComponent.text = GroupName;
+        Vector3 pos = transform.position;
+        pos.y = 0.08f;
+        transform.position = pos;
         GetComponent<Transform>().transform.Rotate(-90, 0, 0);
+      
 
-        if(!BasketSettings.GetComponent<BasketSettings>().checkExists("Alkali"))
+        if (!BasketSettings.GetComponent<BasketSettings>().checkExists("Alkali"))
         {
             GroupName = "Alkali";
             m_TextComponent.text = GroupName;
