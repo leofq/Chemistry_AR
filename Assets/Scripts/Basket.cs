@@ -17,7 +17,7 @@ public class Basket : MonoBehaviour
         m_TextComponent = GetComponentInChildren<TMP_Text>();
         m_TextComponent.text = GroupName;
         Vector3 pos = transform.position;
-        pos.y = 0.01f;
+        pos.y = -0.5f;
         transform.position = pos;
         GetComponent<Transform>().transform.Rotate(-90, 0, 0);
       
