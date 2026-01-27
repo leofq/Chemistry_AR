@@ -9,19 +9,17 @@ public class Basket : MonoBehaviour
     [SerializeField] GameObject BasketSettings;
     private TMP_Text m_TextComponent;
     private MeshFilter m_Mesh; 
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Debug.Log("in start func");
+        // Get the text mesh component for the group name and perform transform on model
         m_TextComponent = GetComponentInChildren<TMP_Text>();
         m_TextComponent.text = GroupName;
         Vector3 pos = transform.position;
-        pos.y = -0.5f;
+        pos.y = 0f;
         transform.position = pos;
         GetComponent<Transform>().transform.Rotate(-90, 0, 0);
       
-
+        // For prototype only 3 basket types, so check if each exists then add appropriate group name to each of the baskets
         if (!BasketSettings.GetComponent<BasketSettings>().checkExists("Alkali"))
         {
             GroupName = "Alkali";
@@ -40,7 +38,6 @@ public class Basket : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
 
@@ -48,16 +45,20 @@ public class Basket : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // Collision with chemical element
         if(other.gameObject.tag == "ChemicalElement")
         {
+            // Check if the group name for that element is the same as the basket group name, if it is increase score otherwise decrease score
             if (other.GetComponent<ChemicalElement>().ElementGroup == GroupName)
             {
+                FindAnyObjectByType<ScoreManager>().positiveScore();
                 FindAnyObjectByType<ScoreManager>().addPoints(100);
                 Destroy(other.gameObject);
             }
             else
             {
                 FindAnyObjectByType<ScoreManager>().addPoints(-30);
+                FindAnyObjectByType<ScoreManager>().negativeScore();
             }
         }
       

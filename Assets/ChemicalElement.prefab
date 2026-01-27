@@ -252,7 +252,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 83eabfe673263a445972586e5d8b56ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -310,6 +310,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ChemicalElement
   ElementName: Na
   ElementGroup: 
+  m_ScoreManager: {fileID: 0}
 --- !u!54 &6336436121666721579
 Rigidbody:
   m_ObjectHideFlags: 0

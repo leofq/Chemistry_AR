@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 
 public class CESpawner : MonoBehaviour
@@ -32,24 +33,22 @@ public class CESpawner : MonoBehaviour
     // Plane manager for detecting if plane is visible
     public ARPlaneManager planeManager;
     [SerializeField] private ARRaycastManager raycastManager;
-    bool isPlacing = false;
-
-    // Screen bounds
-    private float minX, minY, maxX, maxY, minZ, maxZ;
-    private Vector2 pos;
 
     Vector3 hitPosePosition;
     Quaternion hitPoseRotation;
+    private bool isPlacing;
 
     private int ceCount;
 
     private float timer;
 
+    XRGrabInteractable grabbed;
 
     void Start()
     {
         Debug.Log("Hello, Unity!");
-        // Chemical elements and chemical groups
+
+        // Add Chemical elements and chemical groups to dictionary
         dict.Add("Li", "Alkali");
         dict.Add("Na", "Alkali");
         dict.Add("K", "Alkali");
@@ -71,9 +70,11 @@ public class CESpawner : MonoBehaviour
         dict.Add("Sb", "Metalloids");
         dict.Add("Te", "Metalloids");
 
-        
+      
     }
 
+    
+    //Funtion for randomly picking chemical elements from the dictionaty
     public void spawnChemicalElements()
     {
         var dictionary = dict.ToList();
@@ -81,15 +82,16 @@ public class CESpawner : MonoBehaviour
         int randomIndex;
         do
         {
-            randomIndex = Random.Range(0, dictionary.Count);
+            randomIndex = Random.Range(0, dictionary.Count); // finds a random index in the dictionary
         } while (usedElements.Contains(randomIndex));
-        usedElements.Add(randomIndex);
+        usedElements.Add(randomIndex); // store the used index in a used elements list
         var randomChemicalElement = dictionary[randomIndex];
+        
+        // create the chemical element
         ChemicalElements[ceCount] = Instantiate(ChemicalElement_Prefab, hitPosePosition, hitPoseRotation);
         ChemicalElements[ceCount].GetComponent<ChemicalElement>().ElementName = randomChemicalElement.Key;
         ChemicalElements[ceCount].GetComponent<ChemicalElement>().ElementGroup = randomChemicalElement.Value;
-        StartCoroutine(SetIsPlacingToFalseWithDelay());
-
+        StartCoroutine(SetIsPlacingToFalseWithDelay()); 
     }
 
     void Update()
@@ -97,8 +99,11 @@ public class CESpawner : MonoBehaviour
         timer += Time.deltaTime;
 
         if (!raycastManager) return;
+
+        // Check if element needs to be spawned
         if (usedElements.Count < num_chemicalelements && timer > 0.5)
         {
+            // get a radom point in the screen and spawn the chemical element
             Vector2 randPos = getRandomPoint();
             if(getPositionAndRotation(randPos))
             {
@@ -112,11 +117,15 @@ public class CESpawner : MonoBehaviour
     private Vector3 debugHitPos;
     private bool debugHasHit;
 
+
+    // Function for performing a ray cast 
     bool getPositionAndRotation(Vector2 screenPosition)
     {
+        // Get a random screen point in the camera
         Vector2 screenPoint = new Vector2(Random.value * Screen.width, Random.value * Screen.height);
         Ray ray = Camera.main.ScreenPointToRay(screenPoint);
 
+        // Add to list and if the ray cast is successful and set hit post to the hit point
         var rayHits = new List<ARRaycastHit>();
         raycastManager.Raycast(screenPoint, rayHits, TrackableType.Planes);
         if (rayHits.Count > 0)
@@ -125,37 +134,18 @@ public class CESpawner : MonoBehaviour
             hitPosePosition = rayHits[randomElement].pose.position;
             hitPoseRotation = rayHits[randomElement].pose.rotation;
 
-            // Save for debugging
-            debugHasHit = true;
-            debugHitPos = hitPosePosition;
-
             return true;
         }
         else
         {
-            debugHasHit = false;
             return false;
         }
     }
 
-    void OnDrawGizmos()
-    {
-       // if (!debugHasHit) return;
-
-        Gizmos.color = Color.green;
-        Gizmos.DrawSphere(debugHitPos, 0.2f);
-    }
-
+    // Gets random point
     private Vector2 getRandomPoint()
     {
-        //float height = 2f * playerCamera.orthographicSize;
-        //float width = height * playerCamera.aspect;
-
-        //Vector2 pos = new Vector2(
-        //    Random.Range(-width / 2f, width / 2f),
-        //    Random.Range(-height / 2f, height / 2f));
         return new Vector2(Random.value, Random.value);
-        //return pos;
     }
 
     IEnumerator SetIsPlacingToFalseWithDelay()
