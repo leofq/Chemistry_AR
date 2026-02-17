@@ -334,7 +334,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d37db414278d3f94c850ab3d02d11819, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CESpawner
-  num_chemicalelements: 8
+  num_chemicalelements: 12
+  finishedSpawning: 0
   ChemicalElement_Prefab: {fileID: 8136652216557096071, guid: bd9b8b0514f2c34418b4e1c80c2367b3, type: 3}
   target: {fileID: 0}
   playerCamera: {fileID: 828386137}
@@ -446,6 +447,7 @@ GameObject:
   - component: {fileID: 90727002}
   - component: {fileID: 90727001}
   - component: {fileID: 90727006}
+  - component: {fileID: 90727007}
   m_Layer: 5
   m_Name: Score Canvas
   m_TagString: Untagged
@@ -470,6 +472,9 @@ MonoBehaviour:
   elementName: {fileID: 1078770278}
   timer: 2
   showingElementName: 0
+  audioSource: {fileID: 0}
+  correctAudio: {fileID: 8300000, guid: 7cfd2173f98a6794eb41ff8365c59727, type: 3}
+  incorrectAudio: {fileID: 8300000, guid: 0b3397b2b4fc9f1438039512c636b2e4, type: 3}
 --- !u!114 &90727002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -568,6 +573,103 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!82 &90727007
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90727000}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &145380978
 GameObject:
   m_ObjectHideFlags: 0
@@ -1651,8 +1753,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_CameraToFace: {fileID: 828386137}
   m_ObjectPrefabs:
-  - {fileID: 3925871419549447876, guid: 751183ec8be879c4498b5c606afd463c, type: 3}
-  Basket_prefab: {fileID: 3925871419549447876, guid: 751183ec8be879c4498b5c606afd463c, type: 3}
+  - {fileID: 343804074500837237, guid: 83e95780b6ed1dd4dbe8261f5effcb14, type: 3}
+  Basket_prefab: {fileID: 343804074500837237, guid: 83e95780b6ed1dd4dbe8261f5effcb14, type: 3}
   m_SpawnVisualizationPrefab: {fileID: 0}
   m_SpawnOptionIndex: 0
   m_OnlySpawnInView: 1
@@ -6060,6 +6162,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI
   scoreUI: {fileID: 2018204460}
+  spawner: {fileID: 62535827}
+  instructions: {fileID: 1642393827}
 --- !u!114 &1642393827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6080,7 +6184,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Place your collection baskets by tapping on any surface
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c9d7691f4f03cd640b7a27a588ae2d90, type: 2}
   m_sharedMaterial: {fileID: -874910439701227593, guid: c9d7691f4f03cd640b7a27a588ae2d90, type: 2}

@@ -16,6 +16,8 @@ public class CESpawner : MonoBehaviour
     // number of chemical elements to be in scene
     [SerializeField] private int num_chemicalelements;
 
+    public bool finishedSpawning = false;
+
     // Chemical element reference
     public GameObject ChemicalElement_Prefab;
     private GameObject[] ChemicalElements;
@@ -53,22 +55,22 @@ public class CESpawner : MonoBehaviour
         dict.Add("Na", "Alkali");
         dict.Add("K", "Alkali");
         dict.Add("Rb", "Alkali");
-        dict.Add("Cs", "Alkali");
-        dict.Add("Fr", "Alkali");
+        //dict.Add("Cs", "Alkali");
+        //dict.Add("Fr", "Alkali");
 
         dict.Add("Sc", "Transition");
         dict.Add("Ti", "Transition");
         dict.Add("Cr", "Transition");
         dict.Add("Mn", "Transition");
-        dict.Add("Fe", "Transition");
-        dict.Add("Co", "Transition");
+        //dict.Add("Fe", "Transition");
+        //dict.Add("Co", "Transition");
 
         dict.Add("B", "Metalloids");
         dict.Add("Si", "Metalloids");
         dict.Add("Ge", "Metalloids");
         dict.Add("As", "Metalloids");
-        dict.Add("Sb", "Metalloids");
-        dict.Add("Te", "Metalloids");
+        //dict.Add("Sb", "Metalloids");
+       // dict.Add("Te", "Metalloids");
 
       
     }
@@ -111,6 +113,10 @@ public class CESpawner : MonoBehaviour
                 ceCount++;
                 timer = 0;
             }     
+        }
+        if(usedElements.Count == num_chemicalelements)
+        {
+            finishedSpawning = true;
         }
     }
 

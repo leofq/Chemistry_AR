@@ -31,22 +31,22 @@ public class ChemicalElement : MonoBehaviour
         elementNameDictionary.Add("Na", "Sodium");
         elementNameDictionary.Add("K", "Potassium");
         elementNameDictionary.Add("Rb", "Rubidium");
-        elementNameDictionary.Add("Cs", "Caesium");
-        elementNameDictionary.Add("Fr", "Francium");
+        //elementNameDictionary.Add("Cs", "Caesium");
+        //elementNameDictionary.Add("Fr", "Francium");
 
         elementNameDictionary.Add("Sc", "Scandium");
         elementNameDictionary.Add("Ti", "Titanium");
         elementNameDictionary.Add("Cr", "Chromium");
         elementNameDictionary.Add("Mn", "Manganese");
-        elementNameDictionary.Add("Fe", "Iron");
-        elementNameDictionary.Add("Co", "Cobalt");
+        //elementNameDictionary.Add("Fe", "Iron");
+        //elementNameDictionary.Add("Co", "Cobalt");
 
         elementNameDictionary.Add("B", "Boron");
         elementNameDictionary.Add("Si", "Silicon");
         elementNameDictionary.Add("Ge", "Germanium");
         elementNameDictionary.Add("As", "Arsenic");
-        elementNameDictionary.Add("Sb", "Antimony");
-        elementNameDictionary.Add("Te", "Tellurium");
+        //elementNameDictionary.Add("Sb", "Antimony");
+        //elementNameDictionary.Add("Te", "Tellurium");
 
     }
 

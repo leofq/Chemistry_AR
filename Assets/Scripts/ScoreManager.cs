@@ -14,6 +14,10 @@ public class ScoreManager : MonoBehaviour
     private bool showingText = false;
     public bool showingElementName = false;
 
+    public AudioSource audioSource;
+    public AudioClip correctAudio;
+    public AudioClip incorrectAudio;
+
 
     // For showing and updating the player score
 
@@ -21,6 +25,7 @@ public class ScoreManager : MonoBehaviour
     void Start()
     {
         scoreText.text = "Score: " + score.ToString();
+        audioSource = GetComponent<AudioSource>();
     }
 
     
@@ -47,6 +52,11 @@ public class ScoreManager : MonoBehaviour
     {
         score += value;
         scoreText.text = "Score: " + score.ToString();
+
+        if (score < 0)
+        {
+            score = 0;
+        }
     }
 
     public void positiveScore()
@@ -55,7 +65,9 @@ public class ScoreManager : MonoBehaviour
         scorePopup.color = new Color32(122, 229, 133, 255);
         showingText = true;
         scorePopup.text = "Well Done";
+        audioSource.PlayOneShot(correctAudio);
     }
+    
 
     public void negativeScore()
     {
@@ -63,6 +75,7 @@ public class ScoreManager : MonoBehaviour
         scorePopup.color = new Color32(162, 36, 37, 255);
         showingText = true;
         scorePopup.text = "Incorrect";
+        audioSource.PlayOneShot(incorrectAudio);
     }
 
     public void decreaseTimer()
