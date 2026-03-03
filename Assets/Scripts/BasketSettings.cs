@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class BasketSettings : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-
+    // Get a list of the elements already ysed
     List<string> usedElements = new List<string>();
     GameObject[] baskets;
     void Start()
@@ -13,12 +12,12 @@ public class BasketSettings : MonoBehaviour
         
     }
 
-    // Update is called once per frame
     void Update()
     {
 
     }
 
+    // Check if the element already exists in the scene
     public bool checkExists(string name)
     {
         usedElements.Clear();
@@ -32,12 +31,10 @@ public class BasketSettings : MonoBehaviour
 
         if (usedElements.Contains(name))
         {
-            Debug.Log("Already exists");
             return true;
         }
         else
         {
-            Debug.Log("Does not exist");
             return false;
         }
     }

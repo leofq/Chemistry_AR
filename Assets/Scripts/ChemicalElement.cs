@@ -12,10 +12,7 @@ public class ChemicalElement : MonoBehaviour
     [SerializeField] public string ElementGroup;
 
     Dictionary<string, string> elementNameDictionary = new Dictionary<string, string>();
-
-
     private TMP_Text m_TextComponent;
-
     XRGrabInteractable m_ComponentGrabbed;
     [SerializeField] private ScoreManager m_ScoreManager;
 
@@ -31,27 +28,24 @@ public class ChemicalElement : MonoBehaviour
         elementNameDictionary.Add("Na", "Sodium");
         elementNameDictionary.Add("K", "Potassium");
         elementNameDictionary.Add("Rb", "Rubidium");
-        //elementNameDictionary.Add("Cs", "Caesium");
-        //elementNameDictionary.Add("Fr", "Francium");
+
 
         elementNameDictionary.Add("Sc", "Scandium");
         elementNameDictionary.Add("Ti", "Titanium");
         elementNameDictionary.Add("Cr", "Chromium");
         elementNameDictionary.Add("Mn", "Manganese");
-        //elementNameDictionary.Add("Fe", "Iron");
-        //elementNameDictionary.Add("Co", "Cobalt");
+
 
         elementNameDictionary.Add("B", "Boron");
         elementNameDictionary.Add("Si", "Silicon");
         elementNameDictionary.Add("Ge", "Germanium");
         elementNameDictionary.Add("As", "Arsenic");
-        //elementNameDictionary.Add("Sb", "Antimony");
-        //elementNameDictionary.Add("Te", "Tellurium");
 
     }
 
     void Update()
     {
+        // if the chemical is being grabbed, update the UI to show the chemical's full name
          if (checkGrabbed())
         {
             string name = elementNameDictionary[ElementName.ToString()];
@@ -66,6 +60,7 @@ public class ChemicalElement : MonoBehaviour
         }
     }
 
+    // Function for checking if the element is being grabbed
     bool checkGrabbed()
     {
         m_ComponentGrabbed = GetComponent<XRGrabInteractable>();

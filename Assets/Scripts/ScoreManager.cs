@@ -19,11 +19,9 @@ public class ScoreManager : MonoBehaviour
     public AudioClip incorrectAudio;
 
 
-    // For showing and updating the player score
-
-
     void Start()
     {
+        // Show score and get audio manager
         scoreText.text = "Score: " + score.ToString();
         audioSource = GetComponent<AudioSource>();
     }
@@ -31,23 +29,26 @@ public class ScoreManager : MonoBehaviour
     
     void Update()
     {
+        // keep the score updated based on score variable
         scoreText.text = "Score: " + score.ToString();
 
+        // if showing text is true (well done! or incorrect) decrease the timer
         if(showingText)
         {
             decreaseTimer();
         }
         else
         {
-            scorePopup.alpha = 0;
+            scorePopup.alpha = 0; // otherwise, don't want to see the text so turn alpha channel to 0
         }
 
         if(!showingElementName)
         {
-            elementName.alpha = 0;
+            elementName.alpha = 0; // if not showing element name, don't want to see text so turn alpha channel to 0
         }
     }
 
+    // Function for increasing score and updating UI
     public void addPoints(int value)
     {
         score += value;
@@ -59,35 +60,38 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
+    // Function for showing 'well done!' to player when correctly placing element, also plays a sound
     public void positiveScore()
     {
         timer = 2;
-        scorePopup.color = new Color32(122, 229, 133, 255);
+        scorePopup.color = new Color32(122, 229, 133, 255); //green
         showingText = true;
         scorePopup.text = "Well Done";
         audioSource.PlayOneShot(correctAudio);
     }
-    
 
+    // Function for showing 'incorrect' to player when correctly placing element, also plays a sound
     public void negativeScore()
     {
         timer = 2;
-        scorePopup.color = new Color32(162, 36, 37, 255);
+        scorePopup.color = new Color32(162, 36, 37, 255); //red
         showingText = true;
         scorePopup.text = "Incorrect";
         audioSource.PlayOneShot(incorrectAudio);
     }
 
+    // Function for decreasing the timer 
     public void decreaseTimer()
     {
         timer -= Time.deltaTime;
-        if(timer <0)
+        if(timer <0) // changes the showing text to false when timer is at 0
         {
             showingText = false;
             timer = 2;
         }
     }
 
+    // Function for showing the element name on the screen - pops up when user is grabbing element
     public void showElementName(string chemicalName)
     {
         elementName.text = (chemicalName);

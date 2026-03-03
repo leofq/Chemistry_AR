@@ -28,7 +28,6 @@ public class CESpawner : MonoBehaviour
     // Position for spawning chemical element in scene
     private Vector3 position = new Vector3(0, 0, 5);
 
-    // Not sure if needed right now
     [SerializeField] private GameObject target;
     [SerializeField] private Camera playerCamera;
 
@@ -36,6 +35,7 @@ public class CESpawner : MonoBehaviour
     public ARPlaneManager planeManager;
     [SerializeField] private ARRaycastManager raycastManager;
 
+    // Variables for positioning chemical element
     Vector3 hitPosePosition;
     Quaternion hitPoseRotation;
     private bool isPlacing;
@@ -55,24 +55,16 @@ public class CESpawner : MonoBehaviour
         dict.Add("Na", "Alkali");
         dict.Add("K", "Alkali");
         dict.Add("Rb", "Alkali");
-        //dict.Add("Cs", "Alkali");
-        //dict.Add("Fr", "Alkali");
 
         dict.Add("Sc", "Transition");
         dict.Add("Ti", "Transition");
         dict.Add("Cr", "Transition");
         dict.Add("Mn", "Transition");
-        //dict.Add("Fe", "Transition");
-        //dict.Add("Co", "Transition");
 
         dict.Add("B", "Metalloids");
         dict.Add("Si", "Metalloids");
         dict.Add("Ge", "Metalloids");
         dict.Add("As", "Metalloids");
-        //dict.Add("Sb", "Metalloids");
-       // dict.Add("Te", "Metalloids");
-
-      
     }
 
     
@@ -89,7 +81,7 @@ public class CESpawner : MonoBehaviour
         usedElements.Add(randomIndex); // store the used index in a used elements list
         var randomChemicalElement = dictionary[randomIndex];
         
-        // create the chemical element
+        // create the chemical element at the hit point location location
         ChemicalElements[ceCount] = Instantiate(ChemicalElement_Prefab, hitPosePosition, hitPoseRotation);
         ChemicalElements[ceCount].GetComponent<ChemicalElement>().ElementName = randomChemicalElement.Key;
         ChemicalElements[ceCount].GetComponent<ChemicalElement>().ElementGroup = randomChemicalElement.Value;
@@ -131,7 +123,7 @@ public class CESpawner : MonoBehaviour
         Vector2 screenPoint = new Vector2(Random.value * Screen.width, Random.value * Screen.height);
         Ray ray = Camera.main.ScreenPointToRay(screenPoint);
 
-        // Add to list and if the ray cast is successful and set hit post to the hit point
+        // Add to list and if the ray cast successfully hits a plane, set hit pose to the hit point
         var rayHits = new List<ARRaycastHit>();
         raycastManager.Raycast(screenPoint, rayHits, TrackableType.Planes);
         if (rayHits.Count > 0)
@@ -154,6 +146,7 @@ public class CESpawner : MonoBehaviour
         return new Vector2(Random.value, Random.value);
     }
 
+    // Adds a delay to the placement
     IEnumerator SetIsPlacingToFalseWithDelay()
     {
         yield return new WaitForSeconds(1);

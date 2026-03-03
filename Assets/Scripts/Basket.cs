@@ -14,9 +14,6 @@ public class Basket : MonoBehaviour
         // Get the text mesh component for the group name and perform transform on model
         m_TextComponent = GetComponentInChildren<TMP_Text>();
         m_TextComponent.text = GroupName;
-        //Vector3 pos = transform.position;
-        //transform.position = pos;
-        //GetComponent<Transform>().transform.Rotate(-90, 0, 0);
       
         // For prototype only 3 basket types, so check if each exists then add appropriate group name to each of the baskets
         if (!BasketSettings.GetComponent<BasketSettings>().checkExists("Alkali"))
