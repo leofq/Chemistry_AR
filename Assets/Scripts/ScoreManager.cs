@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEditor.Experimental.GraphView;
-using UnityEditor.ShaderGraph;
+//using UnityEditor.Experimental.GraphView;
+//using UnityEditor.ShaderGraph;
 
 public class ScoreManager : MonoBehaviour
 {

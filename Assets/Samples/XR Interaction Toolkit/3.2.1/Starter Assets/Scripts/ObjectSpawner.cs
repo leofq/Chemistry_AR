@@ -4,7 +4,7 @@ using UnityEngine.XR.Interaction.Toolkit.Utilities;
 
 using UnityEngine;
 using UnityEditor;
-using UnityEditor.VersionControl;
+//using UnityEditor.VersionControl;
 
 namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
 {

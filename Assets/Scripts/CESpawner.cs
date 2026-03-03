@@ -38,7 +38,7 @@ public class CESpawner : MonoBehaviour
     // Variables for positioning chemical element
     Vector3 hitPosePosition;
     Quaternion hitPoseRotation;
-    private bool isPlacing;
+    private bool isPlacing = false;
 
     private int ceCount;
 
