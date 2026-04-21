@@ -20,7 +20,7 @@ public class Basket : MonoBehaviour
         {
             GroupName = "Alkali";
             m_TextComponent.text = GroupName;
-            m_Mesh.GetComponent<Renderer>().material.color = new Color(1,0,0,1);
+            //m_Mesh.GetComponent<Renderer>().material.color = new Color(1,0,0,1);
         }
         else if (!BasketSettings.GetComponent<BasketSettings>().checkExists("Transition"))
         {
